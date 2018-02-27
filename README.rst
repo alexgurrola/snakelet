@@ -45,6 +45,7 @@ Connecting to a database is fairly straightforward.
 Finding, Saving, and Removal are also pretty straightforward.
 
 .. code-block:: python
+
     pye = manager.Cat.find_one({'name': 'pyewacket'})
     shoshana = Cat()
     shoshana['name'] = 'shoshana'
