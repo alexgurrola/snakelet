@@ -1,5 +1,11 @@
+from .collection import Collection
 from .document import Document
+from .manager import Manager
+from .paginator import Paginator
 
 __all__ = (
-    'Document'
+    'Collection',
+    'Document',
+    'Manager',
+    'Paginator',
 )

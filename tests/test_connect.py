@@ -1,7 +1,6 @@
 import configparser
 
-from snakelet.storage.document import Document
-from snakelet.storage.manager import Manager
+from snakelet.storage import Document, Manager
 
 
 class Test(Document):
@@ -16,6 +15,7 @@ def test_find():
 
     # Connect to Database
     manager = Manager(
+        case='camel',
         database=config['db'],
         host=config['host'],
         port=config.getint('port'),
@@ -35,6 +35,10 @@ def test_find():
         print('save:', created)
         manager.save(created)
         print('persistent:', created)
+    elif 'updated' not in fetched or not fetched['updated']:
+        print('updating:', fetched)
+        fetched['updated'] = True
+        manager.save(fetched)
     else:
         print('fetched:', fetched)
         print('removing document...')
@@ -42,9 +46,7 @@ def test_find():
 
 
 if __name__ == '__main__':
-    import plac
-
     try:
-        plac.call(test_find)
+        test_find()
     except KeyboardInterrupt:
         print('\nGoodbye!')

@@ -5,11 +5,17 @@ from pymongo import MongoClient
 
 from .collection import Collection
 from .document import Document
-from ..utilities.conversion import camel
+from ..utilities.conversion import Conversion
 
 
 class Manager(object):
-    def __init__(self, database, host=None, port=None, username=None, password=None):
+
+    def __init__(self, database, host=None, port=None, username=None, password=None, case=None):
+
+        # Configuration
+        self.collection_name = Conversion(case)
+        self.document_name = Conversion('camel')
+
         # Driver
         self.client = MongoClient(host=host, port=port)
         self.client[database].authenticate(name=username, password=password)
@@ -46,7 +52,7 @@ class Manager(object):
         self.__setattr__(identifier, Collection(self, document))
 
     def objectify(self, collection, document):
-        name = camel(collection)
+        name = self.document_name.encode(collection)
         if name in self.documents:
             prototype = self.documents[name]()
             if document:
@@ -94,16 +100,3 @@ class Manager(object):
 
     def shutdown(self):
         pass
-
-
-def main():
-    pass
-
-
-if __name__ == '__main__':
-    import plac
-
-    try:
-        plac.call(main)
-    except KeyboardInterrupt:
-        print('\nGoodbye!')

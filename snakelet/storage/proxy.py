@@ -1,15 +1,5 @@
 class Proxy:
+    # TODO: Build a proxy that can load hydrate itself when accessed
+    # TODO: Register models for relations to exist without needing to have separate instances
+    # TODO: Use register to hydrate all models of the same type simultaneously
     pass
-
-
-def main():
-    pass
-
-
-if __name__ == '__main__':
-    import plac
-
-    try:
-        plac.call(main)
-    except KeyboardInterrupt:
-        print('\nGoodbye!')

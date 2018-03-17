@@ -1,13 +1,14 @@
-def main(version: ("display version", 'flag', 'a')):
+def main():
+    import argparse
     import snakelet
-    if version:
-        print(snakelet.__version__)
+
+    parser = argparse.ArgumentParser(description='Schema-less Micro-ORM')
+    parser.add_argument('-v', '--version', dest='version', action='version', version=snakelet.__version__)
+    parser.parse_args()
 
 
 if __name__ == '__main__':
-    import plac
-
     try:
-        plac.call(main)
+        main()
     except KeyboardInterrupt:
         print('\nGoodbye!')

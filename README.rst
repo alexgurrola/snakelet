@@ -16,8 +16,7 @@ Registration only requires exposing the object to the Manager.
 
 .. code-block:: python
 
-    from snakelet.storage.document import Document
-    from snakelet.storage.manager import Manager
+    from snakelet.storage import Document, Manager
 
     class Cat(Document):
         pass
@@ -32,7 +31,7 @@ Connecting to a database is fairly straightforward.
 
 .. code-block:: python
 
-    from snakelet.storage.manager import Manager
+    from snakelet.storage import Manager
 
     manager = Manager(
         database='felines',
@@ -40,6 +39,17 @@ Connecting to a database is fairly straightforward.
         port=27017,
         username='admin',
         password='pass'
+    )
+
+By default, Managers build and fetch collections in snake case, but this
+can be switched to camel case during instantiation.
+
+.. code-block:: python
+
+    from snakelet.storage import Manager
+
+    manager = Manager(
+        case='camel'
     )
 
 Finding, Saving, and Removal are also pretty straightforward.

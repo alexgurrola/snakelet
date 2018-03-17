@@ -1,12 +1,11 @@
 from .paginator import Paginator
-from ..utilities.conversion import snake
 
 
 class Collection:
-    def __init__(self, manager, document):
+    def __init__(self, manager=None, document=None):
         self.manager = manager
         self.document = document
-        self.collection_name = snake(self.document.__name__)
+        self.collection_name = manager.collection_name.encode(self.document.__name__)
         self.collection = self.manager.db[self.collection_name]
 
     def find(self, search):
@@ -35,16 +34,3 @@ class Collection:
 
     def objectify(self, document):
         return self.manager.objectify(self.collection_name, document)
-
-
-def main():
-    pass
-
-
-if __name__ == '__main__':
-    import plac
-
-    try:
-        plac.call(main)
-    except KeyboardInterrupt:
-        print('\nGoodbye!')
