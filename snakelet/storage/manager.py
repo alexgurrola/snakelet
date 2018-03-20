@@ -11,7 +11,14 @@ from ..utilities.conversion import Conversion
 class Manager(object):
 
     def __init__(self, database, host=None, port=None, username=None, password=None, case=None):
-
+        """
+        :param database:
+        :param host:
+        :param port:
+        :param username:
+        :param password:
+        :param case:
+        """
         # Configuration
         self.collection_name = Conversion(case)
         self.document_name = Conversion('camel')
@@ -28,6 +35,10 @@ class Manager(object):
 
     @staticmethod
     def identify(document):
+        """
+        :param document:
+        :return:
+        """
         isclass = inspect.isclass(document)
         if isclass and issubclass(document, Document):
             return document.__name__
@@ -37,6 +48,10 @@ class Manager(object):
             raise TypeError('Value is not an instance or subclass of Document.')
 
     def collection(self, target):
+        """
+        :param target:
+        :return:
+        """
         if not isinstance(target, str):
             target = self.identify(target)
         if target not in self.collections:
@@ -44,6 +59,10 @@ class Manager(object):
         return self.collections[target]
 
     def register(self, document):
+        """
+        :param document:
+        :return:
+        """
         identifier = self.identify(document)
         if identifier in self.documents:
             raise LookupError('Document ' + identifier + ' is already registered.')
@@ -52,6 +71,12 @@ class Manager(object):
         self.__setattr__(identifier, Collection(self, document))
 
     def objectify(self, collection, document):
+        """
+        :param collection:
+        :param document:
+        :return:
+        """
+        # TODO: This should probably access the correct collection instead
         name = self.document_name.encode(collection)
         if name in self.documents:
             prototype = self.documents[name]()
@@ -63,6 +88,10 @@ class Manager(object):
         return document
 
     def hydrate(self, target):
+        """
+        :param target:
+        :return:
+        """
         if isinstance(target, DBRef):
             document = self.find_one(target.collection, target.id)
             if document:
@@ -81,22 +110,48 @@ class Manager(object):
         return target
 
     def find(self, collection, search):
-        documents = []
-        for document in self.db[collection].find(search):
-            documents.append(self.objectify(collection, document))
-        return documents
+        """
+        :param collection:
+        :param search:
+        :return:
+        """
+        # TODO: Be consistent here and use the following:
+        # return self.collection(collection).find(search)
+        return [self.objectify(collection, document) for document in self.db[collection].find(search)]
 
     def find_one(self, collection, search):
+        """
+        :param collection:
+        :param search:
+        :return:
+        """
+        # TODO: Be consistent here and use the following:
+        # return self.collection(collection).find_one(search)
         return self.objectify(collection, self.db[collection].find_one(search))
 
     def save(self, document):
+        """
+        :param document:
+        :return:
+        """
         self.collection(document).save(document)
 
     def refresh(self, document):
+        """
+        :param document:
+        :return:
+        """
         self.collection(document).refresh(document)
 
     def remove(self, document):
+        """
+        :param document:
+        :return:
+        """
         self.collection(document).remove(document)
 
     def shutdown(self):
+        """
+        :return:
+        """
         pass

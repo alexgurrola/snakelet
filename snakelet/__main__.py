@@ -1,9 +1,9 @@
 def main():
     import argparse
-    import snakelet
+    from . import __version__
 
     parser = argparse.ArgumentParser(description='Schema-less Micro-ORM')
-    parser.add_argument('-v', '--version', dest='version', action='version', version=snakelet.__version__)
+    parser.add_argument('-v', '--version', dest='version', action='version', version=__version__)
     parser.parse_args()
 
 

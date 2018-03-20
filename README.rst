@@ -67,4 +67,10 @@ Finding, Saving, and Removal are also pretty straightforward.
 pagination
 ----------
 
-This feature is already built, so the example will be coming soon!
+This feature set is fairly simple and has normal iterable bindings to ensure simple operation.
+
+.. code-block:: python
+
+    for page in manager.Cat.paginate(find={'name': 1}):
+        for cat in page:
+            print(cat['name'])
