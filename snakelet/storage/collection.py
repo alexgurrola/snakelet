@@ -10,7 +10,8 @@ class Collection:
         """
         self.manager = manager
         self.document = document
-        self.collection_name = manager.collection_name.encode(self.document.__name__)
+        self.collection_name = manager.collection_name.encode(
+            self.document.__name__)
         self.collection = self.manager.db[self.collection_name]
 
     def find(self, search):
@@ -19,6 +20,7 @@ class Collection:
         :return:
         """
         # TODO: This should access the internal collection instead
+        # return Query(self.collection.find(self.collection_name, search)
         return self.manager.find(self.collection_name, search)
 
     def find_one(self, search):
@@ -37,7 +39,10 @@ class Collection:
         if '_id' not in document:
             self.collection.insert(document)
         else:
-            self.collection.update({"_id": document['_id']}, document, {'upsert': True})
+            self.collection.update(
+                {
+                    "_id": document['_id']
+                }, document, upsert=True)
 
     def refresh(self, document: Document):
         """

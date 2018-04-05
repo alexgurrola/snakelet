@@ -2,8 +2,12 @@ from .query import Query
 
 
 class Paginator(Query):
-
-    def __init__(self, collection, find: dict = None, offset: int = 0, size: int = 30, sort: str = None,
+    def __init__(self,
+                 collection,
+                 find: dict = None,
+                 offset: int = 0,
+                 size: int = 30,
+                 sort: str = None,
                  start: int = 0):
         """
         :param collection:
@@ -13,6 +17,8 @@ class Paginator(Query):
         :param sort:
         :param start:
         """
+
+        super().__init__()
 
         # database
         self.collection = collection
