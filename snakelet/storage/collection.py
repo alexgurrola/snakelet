@@ -3,79 +3,96 @@ from .paginator import Paginator
 
 
 class Collection:
-    def __init__(self, manager=None, document: Document = None):
+    def __init__(self, manager, document):
         """
-        :param manager:
-        :param document:
+        Args:
+            manager:
+            document:
         """
         self.manager = manager
         self.document = document
-        self.collection_name = manager.collection_name.encode(
-            self.document.__name__)
+        self.collection_name = self.manager.collection_name.encode(self.document.__name__)
         self.collection = self.manager.db[self.collection_name]
 
-    def find(self, search):
+    def find(self, *args, **kwargs):
         """
-        :param search:
-        :return:
-        """
-        # TODO: This should access the internal collection instead
-        # return Query(self.collection.find(self.collection_name, search)
-        return self.manager.find(self.collection_name, search)
+        Args:
+            *args:
+            **kwargs:
 
-    def find_one(self, search):
-        """
-        :param search:
-        :return:
-        """
-        # TODO: This should access the internal collection instead
-        return self.manager.find_one(self.collection_name, search)
+        Returns:
 
-    def save(self, document: Document):
         """
-        :param document:
-        :return:
+        # return Query(self.collection.find(*args, **kwargs))
+        return [self.objectify(document) for document in self.collection.find(*args, **kwargs)]
+
+    def find_one(self, *args, **kwargs):
         """
-        if '_id' not in document:
-            self.collection.insert(document)
-        else:
-            self.collection.update(
-                {
+        Args:
+            *args:
+            **kwargs:
+
+        Returns:
+
+        """
+        return self.objectify(self.collection.find_one(*args, **kwargs))
+
+    def save(self, *args):
+        """
+        Args:
+            *args: One or more documents
+        """
+        for document in args:
+            if not isinstance(document, Document):
+                continue
+            if '_id' not in document:
+                self.collection.insert(document)
+            else:
+                self.collection.update({
                     "_id": document['_id']
                 }, document, upsert=True)
 
-    def refresh(self, document: Document):
+    def refresh(self, *args):
         """
-        :param document:
-        :return:
+        Args:
+            *args: One or more documents
         """
-        if '_id' in document:
+        for document in args:
+            if not isinstance(document, Document) or '_id' not in document:
+                continue
             document.update(self.collection.find_one(document['_id']))
 
-    def remove(self, document: Document):
+    def remove(self, *args):
         """
-        :param document:
-        :return:
+        Args:
+            *args: One or more documents
         """
-        if '_id' in document:
+        for document in args:
+            if not isinstance(document, Document) or '_id' not in document:
+                continue
             self.collection.remove({"_id": document['_id']})
             document.clear()
 
-    def paginate(self, find=None, offset=0, size=30, sort=None, start=0):
+    def paginate(self, **kwargs):
         """
-        :param find:
-        :param offset:
-        :param size:
-        :param sort:
-        :param start:
-        :return:
-        """
-        return Paginator(self, find, offset, size, sort, start)
+        Args:
+            **kwargs:
 
-    def objectify(self, document: Document):
+        Returns:
+            Paginator:
         """
-        :param document:
-        :return:
+        return Paginator(self, **kwargs)
+
+    def objectify(self, document):
         """
-        # TODO: This should access the internal collection instead
-        return self.manager.objectify(self.collection_name, document)
+        Args:
+            document:
+
+        Returns:
+            Document:
+        """
+        if not callable(self.document):
+            raise LookupError('Unable to associate Document in Collection.')
+        prototype = self.document()
+        prototype.update(document)
+        return prototype

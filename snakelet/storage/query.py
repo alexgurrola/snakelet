@@ -62,5 +62,8 @@ class Query:
     def count(self):
         pass
 
+    def limit(self):
+        pass
+
     def sort(self):
         pass

@@ -36,8 +36,11 @@ class Manager(object):
     @staticmethod
     def identify(document):
         """
-        :param document:
-        :return:
+        Args:
+            document:
+
+        Returns:
+            str: Name of document
         """
         isclass = inspect.isclass(document)
         if isclass and issubclass(document, Document):
@@ -49,8 +52,11 @@ class Manager(object):
 
     def collection(self, target):
         """
-        :param target:
-        :return:
+        Args:
+            target:
+
+        Returns:
+            Collection:
         """
         if not isinstance(target, str):
             target = self.identify(target)
@@ -58,23 +64,32 @@ class Manager(object):
             raise LookupError('Collection ' + target + ' does not exist.')
         return self.collections[target]
 
-    def register(self, document):
+    def register(self, *args):
         """
-        :param document:
-        :return:
+        Args:
+            *args: One or more documents
+
+        Returns:
+
         """
-        identifier = self.identify(document)
-        if identifier in self.documents:
-            raise LookupError('Document ' + identifier + ' is already registered.')
-        self.documents[identifier] = document
-        self.collections[identifier] = Collection(self, document)
-        self.__setattr__(identifier, Collection(self, document))
+        for document in args:
+            if not issubclass(document, Document):
+                continue
+            identifier = self.identify(document)
+            if identifier in self.documents:
+                raise LookupError('Document ' + identifier + ' is already registered.')
+            self.documents[identifier] = document
+            self.collections[identifier] = Collection(self, document)
+            self.__setattr__(identifier, Collection(self, document))
 
     def objectify(self, collection, document):
         """
-        :param collection:
-        :param document:
-        :return:
+        Args:
+            collection:
+            document:
+
+        Returns:
+            Document:
         """
         # TODO: This should probably access the correct collection instead
         name = self.document_name.encode(collection)
@@ -89,11 +104,15 @@ class Manager(object):
 
     def hydrate(self, target):
         """
-        :param target:
-        :return:
+        Args:
+            target:
+
+        Returns:
+            object
         """
         if isinstance(target, DBRef):
-            document = self.find_one(target.collection, target.id)
+            # FIXME: This needs to reference the correct collection
+            document = self.collection(target.collection).find_one(target.id)
             if document:
                 document = self.hydrate(self.objectify(target.collection, document))
             return document
@@ -109,49 +128,39 @@ class Manager(object):
         # return target if nothing else occurred
         return target
 
-    def find(self, collection, search):
+    def save(self, *args):
         """
-        :param collection:
-        :param search:
-        :return:
-        """
-        # TODO: Be consistent here and use the following:
-        # return self.collection(collection).find(search)
-        return [self.objectify(collection, document) for document in self.db[collection].find(search)]
+        Args:
+            *args: One or more documents
 
-    def find_one(self, collection, search):
-        """
-        :param collection:
-        :param search:
-        :return:
-        """
-        # TODO: Be consistent here and use the following:
-        # return self.collection(collection).find_one(search)
-        return self.objectify(collection, self.db[collection].find_one(search))
+        Returns:
 
-    def save(self, document):
         """
-        :param document:
-        :return:
-        """
-        self.collection(document).save(document)
+        for document in args:
+            self.collection(document).save(document)
 
-    def refresh(self, document):
+    def refresh(self, *args):
         """
-        :param document:
-        :return:
-        """
-        self.collection(document).refresh(document)
+        Args:
+            *args: One or more documents
 
-    def remove(self, document):
+        Returns:
+
         """
-        :param document:
-        :return:
+        for document in args:
+            self.collection(document).refresh(document)
+
+    def remove(self, *args):
         """
-        self.collection(document).remove(document)
+        Args:
+            *args: One or more documents
+        """
+        for document in args:
+            self.collection(document).remove(document)
 
     def shutdown(self):
         """
-        :return:
+        Returns:
+
         """
         pass

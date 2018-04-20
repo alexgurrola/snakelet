@@ -2,26 +2,25 @@ from .query import Query
 
 
 class Paginator(Query):
-    def __init__(self,
-                 collection,
+    def __init__(self, collection,
                  find: dict = None,
                  offset: int = 0,
                  size: int = 30,
                  sort: str = None,
                  start: int = 0):
         """
-        :param collection:
-        :param find:
-        :param offset:
-        :param size:
-        :param sort:
-        :param start:
+        Args:
+            collection:
+            find (dict):
+            offset (int):
+            size (int):
+            sort (str):
+            start (int):
         """
 
-        super().__init__()
+        super().__init__(None)
 
         # database
-        self.collection = collection
         self.objectify = collection.objectify
         self.collection = collection.collection
 
@@ -34,13 +33,15 @@ class Paginator(Query):
 
     def __iter__(self):
         """
-        :return:
+        Returns:
+
         """
         return self
 
     def __next__(self):
         """
-        :return:
+        Returns:
+
         """
         # FIXME: This should be a local value with a find to ensure we get an accurate count
         limit = self.collection.count() - self.offset
