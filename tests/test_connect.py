@@ -52,6 +52,8 @@ def test_find():
         print('removing document...')
         manager.remove(fetched)
 
+    assert True
+
 
 def test_page():
     # Connection
@@ -76,9 +78,4 @@ def test_page():
         for test in page:
             print(test)
 
-
-if __name__ == '__main__':
-    try:
-        test_page()
-    except KeyboardInterrupt:
-        print('\nGoodbye!')
+    assert True

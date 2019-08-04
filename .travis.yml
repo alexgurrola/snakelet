@@ -1,0 +1,39 @@
+language: python
+cache: pip
+
+python:
+- '2.7'
+- '3.5'
+- '3.6'
+- '3.7'
+
+services:
+  - mongodb
+
+matrix:
+  fast_finish: true
+  include:
+    - python: 3.7
+      dist: xenial
+
+env:
+  global:
+    - FOO=1
+
+install:
+  - pip install -r requirements.txt --use-mirrors
+  - pip install coveralls
+
+before_script:
+  - sleep 15
+  - mongo mydb_test --eval 'db.createUser({user:"travis",pwd:"test",roles:["readWrite"]});'
+
+script:
+  #- python setup.py build_tests || python setup.py egg_info; python selftest.py
+  - nosetests -v --with-coverage
+
+after_success:
+  - if [[ "$TRAVIS_PULL_REQUEST" == "false" ]]; then coveralls; fi
+
+before_deploy:
+  - pip install twine

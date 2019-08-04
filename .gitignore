@@ -102,6 +102,3 @@ ENV/
 
 # IDE Stuff
 .idea
-
-# Test Auth Config
-tests/config.ini
