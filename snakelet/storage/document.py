@@ -13,3 +13,6 @@ class Document(dict):
         self.__meta__[key] = type
         return
     """
+
+    def is_new(self):
+        return self.get('_id') is None
