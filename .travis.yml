@@ -26,7 +26,7 @@ install:
 
 before_script:
   - sleep 15
-  - mongo mydb_test --eval 'db.createUser({user:"travis",pwd:"test",roles:["readWrite"]});'
+  - mongo snakelet_test --eval 'db.createUser({user:"snakelet_test",pwd:"e880c7f6bb0a4ed4866d9da2b829e8a3e61b69f4",roles:["readWrite"]});'
 
 script:
   #- python setup.py build_tests || python setup.py egg_info; python selftest.py
