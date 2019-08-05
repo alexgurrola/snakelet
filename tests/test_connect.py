@@ -48,38 +48,24 @@ def test_create_single():
 
 
 def test_create_batch():
-    owner = manager.Owner.find_one({'name': 'Schrödinger'})
+    owner = manager.collection('Owner').find_one({'name': 'Schrödinger'})
     assert owner is not None
     # save count
     # manager.Cat.count()
-    # create cats
-    test_set = 10
-    for x in range(test_set):
+    # create
+    batch = 10
+    cats = []
+    for x in range(batch):
+        # create reference
         cat = Cat()
+        cats.append(cat)
+        # add data
         cat['name'] = '{1} {0}'.format(str(x), 'Pyewacket' if x % 2 == 0 else 'Shoshana')
+        # add reference
         cat['owner'] = owner
+    # persist entire list
+    manager.collection('Cat').save(cats)
     # assert count is test_set more
-    assert True
-
-
-def test_find():
-    # Fetch and/or Create
-    # fetched = manager.Test.find_one({'name': 'example'})
-    # if not fetched:
-    #     print('unable to find document; creating new document...')
-    #     created = Test()
-    #     created['name'] = 'example'
-    #     print('save:', created)
-    #     manager.save(created)
-    #     print('persistent:', created)
-    # elif 'updated' not in fetched or not fetched['updated']:
-    #     print('updating:', fetched)
-    #     fetched['updated'] = True
-    #     manager.save(fetched)
-    # else:
-    #     print('fetched:', fetched)
-    #     print('removing document...')
-    #     manager.remove(fetched)
     assert True
 
 
@@ -104,3 +90,10 @@ def test_page():
     #         print(test)
 
     assert True
+
+
+def test_delete_single():
+    owner = manager.collection('Owner').find_one({'name': 'Schrödinger'})
+    assert owner is not None
+    manager.remove(owner)
+    assert owner.is_new()
