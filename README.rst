@@ -4,6 +4,15 @@ snakelet
 .. image:: https://badge.fury.io/py/snakelet.svg
     :target: https://badge.fury.io/py/snakelet
 
+.. image:: https://travis-ci.com/alexgurrola/snakelet.svg?branch=master
+    :target: https://travis-ci.com/alexgurrola/snakelet
+
+.. image:: https://scrutinizer-ci.com/g/alexgurrola/snakelet/badges/quality-score.png?b=master
+    :target: https://scrutinizer-ci.com/g/alexgurrola/snakelet/?branch=master
+
+.. image:: https://scrutinizer-ci.com/g/alexgurrola/snakelet/badges/coverage.png?b=master
+    :target: https://scrutinizer-ci.com/g/alexgurrola/snakelet/?branch=master
+
 Snakelet is a Schema-less ORM-like system built in pure Python to reduce
 redundancy with Mongo Native Drivers and Object Management.  This package
 contains a very simple implementation and will need to be expanded upon
