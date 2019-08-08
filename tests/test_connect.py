@@ -51,22 +51,23 @@ def test_create_batch():
     owner = manager.collection('Owner').find_one({'name': 'Schrödinger'})
     assert owner is not None
     # save count
-    # manager.Cat.count()
+    initial_count = manager.collection('Cat').collection.count()
     # create
-    batch = 10
-    cats = []
+    batch = 20
+    # cats = []
     for x in range(batch):
         # create reference
         cat = Cat()
-        cats.append(cat)
+        # cats.append(cat)
         # add data
         cat['name'] = '{1} {0}'.format(str(x), 'Pyewacket' if x % 2 == 0 else 'Shoshana')
         # add reference
         cat['owner'] = owner
-    # persist entire list
-    manager.collection('Cat').save(cats)
+        # persist object
+        manager.collection('Cat').save(cat)
     # assert count is test_set more
-    assert True
+    complete_count = manager.collection('Cat').collection.count()
+    assert initial_count == complete_count - batch
 
 
 def test_page():
@@ -75,20 +76,11 @@ def test_page():
     results = manager.Test.find({'name': 1})
     result_count = results.count()
     """
-    # result_count = manager.Test.collection.count()
-    # print('count:', result_count)
-    #
-    # if result_count < 10:
-    #     filler = []
-    #     for x in range(0, 10):
-    #         data = Test({'value': x})
-    #         filler.append(data)
-    #         manager.save(data)
-    #
-    # for page in manager.Test.paginate(find={'name': 1}):
+    # for page in manager.collection('Cat').paginate(find={'name': 1}, size=5):
+    #     print(len(page))
     #     for test in page:
     #         print(test)
-
+    #
     assert True
 
 

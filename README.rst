@@ -7,6 +7,9 @@ snakelet
 .. image:: https://travis-ci.com/alexgurrola/snakelet.svg?branch=master
     :target: https://travis-ci.com/alexgurrola/snakelet
 
+.. image:: http://img.shields.io/coveralls/alexgurrola/snakelet/master.svg
+    :target: https://coveralls.io/r/alexgurrola/snakelet
+
 .. image:: https://scrutinizer-ci.com/g/alexgurrola/snakelet/badges/quality-score.png?b=master
     :target: https://scrutinizer-ci.com/g/alexgurrola/snakelet/?branch=master
 
