@@ -1,6 +1,10 @@
 snakelet
 ========
 
+.. image:: https://api.codacy.com/project/badge/Grade/7d934f54cbd0438098601f376ed2d51a
+   :alt: Codacy Badge
+   :target: https://app.codacy.com/app/alexgurrola/snakelet?utm_source=github.com&utm_medium=referral&utm_content=alexgurrola/snakelet&utm_campaign=Badge_Grade_Dashboard
+
 .. image:: https://badge.fury.io/py/snakelet.svg
     :target: https://badge.fury.io/py/snakelet
 
